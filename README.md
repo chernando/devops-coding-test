@@ -1,27 +1,92 @@
-# DevOps challenge
+# DevOps Challenge
 
-With this challenge we want to evaluate your skills as a DevOps expert. The solution should:
-- Meet every requirement detailed in the Main objectives.
-- Demonstrate your ability to produce high quality and well documented code.
+## Prerequisites
 
-To achieve these goals, you can use all the tools and libraries you want. Finally, there is one optional goal which, if achieved, will be positively considered.
+Before you can run the DevOps Challenge application, ensure that you have the following prerequisites installed:
+
+- [Java Development Kit (JDK) 11](https://openjdk.java.net/projects/jdk/11/)
+- [Docker](https://www.docker.com/get-started)
+
+## Installation
+
+To install the DevOps Challenge application, follow these steps:
+
+1. Clone this repository to your local machine:
+
+   ```shell
+   git clone https://github.com/chernando/devops-coding-test.git
+   ```
+
+2. Change into the project directory:
+
+   ```shell
+   cd devops-coding-test
+   ```
+
+3. Build the application:
+
+   ```shell
+   ./scripts/build.sh
+   ```
+
+## Usage
+
+To run the DevOps Challenge application locally, execute the following command:
+
+```shell
+./scripts/run.sh
+```
+
+Once the application is running, you can access it by navigating to [http://localhost:8443](http://localhost:8443) in your web browser.
+
+## Development & Deployment
+
+1. Ensure you have bumped the version in `pom.xml`:
+
+   ```xml
+	 <groupId>com.example</groupId>
+	 <artifactId>demo</artifactId>
+	 <version>0.0.1-SNAPSHOT</version>
+	 <name>demo</name>
+	 <description>Demo project for Spring Boot</description>
+   ```
+
+2. Create a Pull Request.
+
+3. GitHub Actions will eventually publishes the image to our private Container Registry.
+   
+   - You can check the progress in the `Actions` tab. 
+
+4. Use XXX to deploy this version into the correct ECS/EKS environment.
+
+### Manually publishing image to ECR
+
+1. Log in to Amazon ECR:
+
+    For security reasons, you have to renew your credentials every 12 hours.
+
+    ```shell
+    # Set $REGION & $ACCOUNT
+    
+    aws ecr get-login-password --region $REGION | docker login --username AWS --password-stdin $ACCOUNT.dkr.ecr.$REGION.amazonaws.com
+    ```
+    
+    > 💡 Alternatively, you can use https://github.com/awslabs/amazon-ecr-credential-helper
 
 
-## Required tools
-To implement a solution, you should be familiar with these tools:
+2. Tag the image:
 
-1. Any Linux environment
-2. [Java 11](https://adoptopenjdk.net/)
-3. [Docker](https://docs.docker.com/engine/install/)
-## Objectives
-The main goal is to create and run a Docker container with this Spring Boot application. You only have to implement the code in the three files that are in the scripts folder.
-### Main
-1. Implement the **build.sh** script, this script should compile the Spring Boot application and create the Docker image.
-2. Implement the **Dockerfile**, add the necessary commands to assemble the image. This image should include the previously compiled code, and it should also execute it.
-3. Implement the **run.sh** script, this script should run the Docker container.
-4. Create a pipeline that loads the previously created Docker image into a registry. Explain briefly which CI/CD tool and registry were chosen and why.
-### Optional
-1. Explain how to deploy previously created Docker image into AWS and which tools and services you will use for. _Note: there aren't a bad or good answer, but you need argument it_
+    Match your local image with our Container Registry:
 
-**IMPORTANT:** You don't need a real AWS account, we are only going to evaluate the usage of the AWS command line interface.
-# devops-coding-test
+    ```shell
+  
+    # Set $PROJECT & $VERSION
+
+    docker tag $PROJECT:$VERSION $ACCOUNT.dkr.ecr.$REGION.amazonaws.com/$PROJECT:$VERSION
+    ```
+
+3. Push:
+
+    ```shell
+    docker push $ACCOUNT.dkr.ecr.$REGION.amazonaws.com/$PROJECT:$VERSION
+    ```
