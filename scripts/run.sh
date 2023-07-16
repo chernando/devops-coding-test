@@ -13,7 +13,7 @@ if test -f target/maven-archiver/pom.properties; then
 		--interactive \
 		--tty \
 		--rm \
-		example/$artifactId:$version
+		$artifactId:$version
 	echo "⏹  Stopped at… $(date "+%H:%M:%S")"
 
 else

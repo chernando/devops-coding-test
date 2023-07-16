@@ -15,7 +15,7 @@ if test -f "$JAR_FILE"; then
 
 	docker build \
 		--file scripts/Dockerfile \
-		--tag example/$artifactId:$version \
+		--tag $artifactId:$version \
 		--build-arg jar_file=$JAR_FILE \
 		.
 
